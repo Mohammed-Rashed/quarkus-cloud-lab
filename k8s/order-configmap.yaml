@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: order-config
+  namespace: quarkus-lab
+
+data:
+  QUARKUS_HTTP_PORT: "8080"
+  QUARKUS_DATASOURCE_JDBC_URL: "jdbc:postgresql://order-postgres:5432/order_db"
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"

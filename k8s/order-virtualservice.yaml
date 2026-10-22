@@ -1,0 +1,66 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+
+metadata:
+  name: order-virtualservice
+  namespace: quarkus-lab
+
+spec:
+  hosts:
+    - "order.local"
+
+  gateways:
+    - order-gateway
+
+  http:
+    - match:
+        - uri:
+            prefix: /orders/unstable
+      route:
+        - destination:
+            host: order-service
+            subset: v2
+            port:
+              number: 8080
+
+    - match:
+        - uri:
+            prefix: /orders/slow
+      route:
+        - destination:
+            host: order-service
+            subset: v2
+            port:
+              number: 8080
+      timeout: 2s
+
+    - match:
+        - uri:
+            prefix: /
+
+      route:
+        - destination:
+            host: order-service
+            subset: v1
+            port:
+              number: 8080
+          weight: 90
+          headers:
+            response:
+              add:
+                X-Version: "v1"
+
+        - destination:
+            host: order-service
+            subset: v2
+            port:
+              number: 8080
+          weight: 10
+          headers:
+            response:
+              add:
+                X-Version: "v2"
+      timeout: 2s
+      retries:
+        attempts: 2
+        retryOn: 5xx
