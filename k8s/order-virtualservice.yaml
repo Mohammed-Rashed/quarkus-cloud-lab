@@ -32,7 +32,6 @@ spec:
             subset: v2
             port:
               number: 8080
-      timeout: 2s
 
     - match:
         - uri:

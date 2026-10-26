@@ -1,0 +1,12 @@
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: order-postgres
+  namespace: quarkus-lab
+
+spec:
+  host: order-postgres.quarkus-lab.svc.cluster.local
+
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
